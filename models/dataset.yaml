@@ -1,0 +1,8 @@
+path: /home/smoon23/data/
+val: test_eval_temp/images
+train: train/images
+test: test_eval_temp/images
+nc: 2
+names:
+  0: smoke
+  1: fire

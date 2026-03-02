@@ -1,0 +1,12 @@
+# Models directory
+# These model files should be tracked (exception to root .gitignore)
+
+# Allow all files in this directory
+!*.pt
+!*.engine
+!*.yaml
+!*.md
+
+# But still ignore temporary files
+*.tmp
+*.cache

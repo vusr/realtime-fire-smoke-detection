@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  fire-detection:
+    build: .
+    image: fire-detection:latest
+    container_name: fire-detection
+    
+    # GPU configuration for RTX 4080
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    # Mount volumes for input/output
+    volumes:
+      - ./videos:/data/videos:ro  # Mount videos as read-only
+      - ./output:/data/output     # Mount output directory
+    
+    # Environment variables
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    
+    # Override command to run inference
+    # Modify the command below for your use case
+    command: >
+      python inference_tensorrt.py
+      --video /data/videos/test_video.mp4
+      --output /data/output/
+      --conf-thresh 0.25
+      --batch-size 16
+    
+    # Keep container running for interactive use (comment out command above)
+    # stdin_open: true
+    # tty: true

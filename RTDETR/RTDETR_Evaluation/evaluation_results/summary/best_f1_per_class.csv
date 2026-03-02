@@ -1,0 +1,3 @@
+class,best_F1,conf_threshold,precision,recall
+smoke,0.8165,0.6150,0.8563,0.7801
+fire,0.6914,0.5180,0.7028,0.6803

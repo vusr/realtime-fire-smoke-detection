@@ -1,0 +1,107 @@
+Configuration loaded from: /home/smoon23/data.yaml
+  Data root      : /home/smoon23
+  Test images    : /home/smoon23/data/test/images
+  Test labels    : /home/smoon23/data/test/labels
+  Model          : yolo26m_best.pt
+  Classes (2)    : ['smoke', 'fire']
+  Device         : cuda
+  Output         : /home/smoon23/YOLO26m/evaluation/evaluation_results
+
+================================================================
+STEP 1  Scanning test images
+================================================================
+  4,306 images found in /home/smoon23/data/test/images
+  fire=1,115  smoke=2,081  background=2,005                                                                                                                                                      
+
+================================================================
+STEP 2  Running inference on all test images
+================================================================
+  Inference: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 270/270 [01:22<00:00,  3.28it/s]
+  36,965 total detections collected (conf ≥ 0.001)
+
+================================================================
+STEP 3  Loading ground-truth labels
+================================================================
+  GT boxes — smoke: 2,315  fire: 2,878  total: 5,193                                                                                                                                             
+
+================================================================
+STEP 4  Computing metrics at each IoU threshold
+================================================================
+  IoU sweep: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:02<00:00,  4.05it/s]
+
+  mAP@0.50      : 0.7748
+  mAP@0.50:0.95 : 0.4493
+
+================================================================
+STEP 5  Generating metric plots
+================================================================
+  5a. PR curves per IoU threshold …
+  5b. Combined PR curves (per class) …
+  5c. P/R/F1 vs confidence …
+  5d. mAP vs IoU curve …
+  5e. Confusion matrix …
+  5f. Confidence distribution …
+  5g. GT box size distribution …
+  5h. F1 heat-map …
+  5i. PR operating-point scatter …
+
+================================================================
+STEP 6  Generating prediction visualisations
+================================================================
+    [fire] 20 images saved  →  grid_fire.jpg
+    [smoke] 20 images saved  →  grid_smoke.jpg
+    [background] 20 images saved  →  grid_background.jpg
+
+================================================================
+STEP 7  Writing summary report
+================================================================
+================================================================================
+YOLO EVALUATION REPORT
+Model  : yolo26m_best.pt
+Device : cuda
+================================================================================
+
+── Dataset Statistics ──
+  Test images  : 4,306
+    with fire  : 1,115
+    with smoke : 2,081
+    background : 2,005  (no GT boxes)
+  GT boxes     : smoke=2,315  fire=2,878  total=5,193
+  Detections   : 36,965  (conf ≥ 0.001, NMS IoU=0.65)
+
+── Average Precision by Class and IoU Threshold ──
+Class       AP@50    AP@55    AP@60    AP@65    AP@70    AP@75    AP@80    AP@85    AP@90    AP@95    mean-AP  
+---------------------------------------------------------------------------------------------------------------
+smoke       0.8375   0.8121   0.7718   0.7112   0.6372   0.5382   0.4277   0.2954   0.1575   0.0254   0.5214   
+fire        0.7122   0.6722   0.6195   0.5439   0.4582   0.3495   0.2334   0.1299   0.0512   0.0019   0.3772   
+---------------------------------------------------------------------------------------------------------------
+mAP         0.7748   0.7421   0.6957   0.6276   0.5477   0.4438   0.3305   0.2126   0.1044   0.0137   0.4493   
+
+  mAP@0.50      : 0.7748
+  mAP@0.50:0.95 : 0.4493
+
+── Per-class AP@0.50 ──
+  smoke     : 0.8375
+  fire      : 0.7122
+
+── Per-class AP@0.75 ──
+  smoke     : 0.5382
+  fire      : 0.3495
+
+── Best F1 Score per Class (IoU = 0.50) ──
+  smoke      F1=0.8173  conf=0.350  P=0.8290  R=0.8060
+  fire       F1=0.6987  conf=0.367  P=0.7469  R=0.6564
+
+── Confusion Matrix Totals (conf ≥ 0.25, IoU ≥ 0.50) ──
+  TP smoke : 1,926   FP smoke→fire : 11   FN smoke→bg : 379
+  TP fire  : 2,020   FP fire→smoke : 10   FN fire→bg : 847
+  FP smoke  (bg→smoke)  : 509
+  FP fire  (bg→fire) : 993
+
+── Elapsed : 92.7s ──
+
+
+================================================================
+All outputs saved to : /home/smoon23/YOLO26m/evaluation/evaluation_results
+Total elapsed        : 92.7s
+================================================================
