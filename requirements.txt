@@ -1,48 +1,48 @@
 # Core dependencies for fire detection inference
 # Python 3.10+
 
-# PyTorch (install separately with CUDA support)
-# torch>=2.1.0
-# torchvision>=0.16.0
+# PyTorch (pre-installed in base image, but specify versions if needed)
+torch>=2.10.0
+torchvision>=0.25.0
 
 # YOLO and object detection
-ultralytics>=8.0.0
+ultralytics>=8.4.0
 
-# TensorRT inference (for TensorRT script)
-# Install from: https://developer.nvidia.com/tensorrt
-# tensorrt>=10.0.0
-# OR install via pip if available:
-# nvidia-tensorrt==10.0.1
+# TensorRT inference (usually comes with NVIDIA base images)
+# tensorrt>=10.15.0
 
 # CUDA acceleration for TensorRT
-pycuda>=2024.1
+# pycuda>=2024.1  # Often incompatible, may need specific version
 
 # Computer vision
-opencv-python>=4.8.0
-opencv-contrib-python>=4.8.0
+opencv-python>=4.13.0
 
 # Numerical computing
-numpy>=1.24.0
+numpy>=2.3.0,<3.0.0  # Be careful with numpy 2.x compatibility
 
 # Progress bars
-tqdm>=4.66.0
+tqdm>=4.67.0
 
 # Data handling
 pandas>=2.0.0
 
 # Image processing
-Pillow>=10.0.0
+Pillow>=12.0.0
 
 # YAML parsing (for config files)
 PyYAML>=6.0
 
 # Performance monitoring
-psutil>=5.9.0
+psutil>=7.2.0
 
 # Optional: Visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
+matplotlib>=3.10.0
 
-# Optional: Video processing
-imageio>=2.31.0
-imageio-ffmpeg>=0.4.9
+# TensorFlow/Keras (if you used it for evaluation)
+tensorflow>=2.20.0
+
+# Protobuf (important for TensorRT)
+protobuf>=7.34.0
+
+# Additional dependencies from your VM
+flatbuffers>=25.12.0
