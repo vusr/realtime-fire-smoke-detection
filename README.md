@@ -110,16 +110,18 @@ The INT8 model provides excellent speed with minimal accuracy loss
 
 ## Detection Visualizations
 
+## Detection Visualizations
+
 ### Fire Detection Examples
 
 <table>
 <tr>
-<td width="50%"><img src="assets/visualizations/fire_night_detection.jpg" alt="Fire detection at night"></td>
-<td width="50%"><img src="assets/visualizations/fire_large_smoke.jpg" alt="Large fire with smoke"></td>
+<td width="50%"><img src="assets/visualizations/fire_1.jpg" alt="Fire detection example 1"></td>
+<td width="50%"><img src="assets/visualizations/fire_2.jpg" alt="Fire detection example 2"></td>
 </tr>
 <tr>
-<td width="50%"><img src="assets/visualizations/fire_night_multi.jpg" alt="Multiple fire sources"></td>
-<td width="50%"><img src="assets/visualizations/fire_daytime_building.jpg" alt="Building fire daytime"></td>
+<td width="50%"><img src="assets/visualizations/fire_3.jpg" alt="Fire detection example 3"></td>
+<td width="50%"><img src="assets/visualizations/fire_4.jpg" alt="Fire detection example 4"></td>
 </tr>
 </table>
 
@@ -127,12 +129,12 @@ The INT8 model provides excellent speed with minimal accuracy loss
 
 <table>
 <tr>
-<td width="50%"><img src="assets/visualizations/smoke_daytime_aerial.jpg" alt="Aerial smoke detection"></td>
-<td width="50%"><img src="assets/visualizations/smoke_wildfire_news.jpg" alt="Wildfire smoke"></td>
+<td width="50%"><img src="assets/visualizations/smoke_1.jpg" alt="Smoke detection example 1"></td>
+<td width="50%"><img src="assets/visualizations/smoke_2.jpg" alt="Smoke detection example 2"></td>
 </tr>
 <tr>
-<td width="50%"><img src="assets/visualizations/smoke_building_daytime.jpg" alt="Building smoke"></td>
-<td width="50%"><img src="assets/visualizations/smoke_building_fire.jpg" alt="Building fire smoke"></td>
+<td width="50%"><img src="assets/visualizations/smoke_3.jpg" alt="Smoke detection example 3"></td>
+<td width="50%"><img src="assets/visualizations/smoke_4.jpg" alt="Smoke detection example 4"></td>
 </tr>
 </table>
 
