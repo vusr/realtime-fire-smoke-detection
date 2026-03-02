@@ -1,16 +1,10 @@
-# Fire and Smoke Detection for Vehicle-Mounted Cameras
+# Fire and Smoke Detection
 
-Real-time fire and smoke detection system optimized for vehicle-mounted cameras processing ~2K resolution video at 30+ FPS on consumer-grade GPUs (RTX 4080).
+Real-time fire and smoke detection system optimized for real-time video processing on consumer-grade GPUs.
 
 ## Overview
 
-This project develops a lightweight object detection model for identifying fire and smoke from vehicle camera feeds. The solution uses YOLOv11 (YOLO26l) trained on the Dfire dataset and optimized with TensorRT INT8 quantization to achieve high throughput while maintaining strong detection accuracy.
-
-**Key Requirements:**
-- Input: ~2K resolution camera feed
-- Target: ~30 FPS on RTX 4080 desktop GPU
-- High precision and recall for fire/smoke detection
-- Optimized for hours-long video feeds with sparse fire events
+This project develops a lightweight object detection model for identifying fire and smoke from images. The solution uses YOLO26L detection model trained on the Dfire dataset and optimized with TensorRT INT8 quantization to achieve high throughput while maintaining strong detection accuracy.
 
 ## Dataset
 
@@ -45,7 +39,7 @@ Three state-of-the-art object detection architectures were trained and evaluated
 
 ## Training Configuration
 
-- **Architecture**: YOLOv11 Large (YOLO26l)
+- **Architecture**: YOLO26 Large
 - **Input size**: 640×640
 - **Epochs**: 100
 - **Batch size**: 24
@@ -106,13 +100,13 @@ The model was quantized using TensorRT with multiple precision modes and batch s
 ### Selected Model: TRT-INT8-B16
 
 **Performance Highlights:**
-- **Throughput**: 459 img/s on L4 GPU (~**15+ FPS on 2K video with batch processing**)
+- **Throughput**: 459 img/s on L4 GPU
 - **Latency**: 2.18 ms per image
 - **Model size**: 31 MB (41% smaller than FP32)
 - **Speedup**: 3.54× faster than PyTorch FP32
 - **Accuracy**: mAP@50 = 0.7667 (97% of baseline)
 
-The INT8 model provides excellent speed with minimal accuracy loss, easily exceeding 30 FPS requirements on RTX 4080.
+The INT8 model provides excellent speed with minimal accuracy loss
 
 ## Detection Visualizations
 
@@ -291,22 +285,6 @@ docker run --rm --gpus all nvidia/cuda:12.1.0-base-ubuntu22.04 nvidia-smi
 └── RTDETR/                         # RT-DETR experiments
 ```
 
-## Performance Expectations (RTX 4080)
-
-Based on L4 benchmarks and RTX 4080 specifications:
-
-| Scenario | Expected FPS | Notes |
-|----------|--------------|-------|
-| 1080p (1920×1080) | **60+ FPS** | With TensorRT INT8, batch size 16 |
-| 2K (2048×1536) | **35-40 FPS** | Meets 30 FPS requirement |
-| 4K (3840×2160) | **15-20 FPS** | May need frame skipping |
-
-**RTX 4080 Advantages:**
-- ~2× tensor core performance vs L4
-- 16 GB VRAM (sufficient for large batches)
-- Higher memory bandwidth
-- Native INT8 tensor core support
-
 ## Installation (Local)
 
 ### Prerequisites
@@ -452,22 +430,6 @@ python inference_tensorrt.py --video video.mp4 --batch-size 8
 - Use TensorRT instead of PyTorch
 - Enable frame skipping for very long videos
 - Ensure CUDA and drivers are properly installed
-
-## Citation
-
-If you use this work, please cite:
-
-```bibtex
-@misc{fire-detection-yolo,
-  title={Real-time Fire and Smoke Detection for Vehicle Cameras},
-  author={Your Name},
-  year={2026}
-}
-```
-
-## License
-
-[Specify License]
 
 ## Acknowledgments
 
