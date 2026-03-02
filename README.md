@@ -29,7 +29,7 @@ This project develops a lightweight object detection model for identifying fire 
 
 Due to the large size of model files and complete evaluation results, all project artifacts are hosted on Google Drive:
 
-**📁 [Download Complete Project Files from Google Drive](https://drive.google.com/drive/folders/1f7-pTov6M6ZUjG3o-urrcrw-zVAHnJLN?usp=sharing)**
+**📁 [Download Complete Project Files from Google Drive](https://drive.google.com/drive/folders/1iDERjwrQZ4gLwx3zcZushupQ8j0_xjgH?usp=sharing)**
 
 ### What's Included
 
