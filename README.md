@@ -350,13 +350,13 @@ The models were trained and evaluated with the following environment:
 
 **Option 1: Install with CUDA 13.0 (Recommended - matches training environment)**
 
-# Install PyTorch with CUDA 13.0 support
+#### Install PyTorch with CUDA 13.0 support
 pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cu130
 
-# Install other dependencies
+#### Install other dependencies
 pip install -r requirements.txt
 
-# Install TensorRT (for TensorRT inference)
+#### Install TensorRT (for TensorRT inference)
 pip install tensorrt>=10.15.0
 ```
 
