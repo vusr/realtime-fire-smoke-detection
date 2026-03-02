@@ -108,7 +108,17 @@ The model was quantized using TensorRT with multiple precision modes and batch s
 
 The INT8 model provides excellent speed with minimal accuracy loss
 
-## Detection Visualizations
+**📊 View Complete Quantization Reports:**
+- [YOLO26l Quantization Report](YOLO26l/YOLO26l_Quantization/optimized_models_yolo26l/quantization_report.txt)
+- [YOLO26m Quantization Report](YOLO26m/YOLO26m_Quantization/optimized_models_yolo26m/quantization_report.txt)
+- [RT-DETR Quantization Report](RTDETR/RTDETR_Quantization/optimized_models_rtdetr/quantization_report.txt)
+
+Each report includes detailed metrics for:
+- PyTorch FP32/FP16 models (batch sizes 16, 32, 64)
+- TensorRT FP16 engines (batch sizes 16, 32, 64)
+- TensorRT INT8 engines (batch sizes 16, 32, 64)
+- Latency, throughput, model size comparisons
+- Accuracy trade-offs for each optimization
 
 ## Detection Visualizations
 
