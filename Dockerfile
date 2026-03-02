@@ -1,8 +1,8 @@
 # Fire and Smoke Detection - Docker Image
-# Optimized for RTX 4080 GPU with CUDA 12.x and TensorRT support
+# Optimized for NVIDIA L4 GPU with CUDA 13.0 and TensorRT support
 
-# Use NVIDIA PyTorch base image with CUDA 12.1 and TensorRT
-FROM nvcr.io/nvidia/pytorch:24.01-py3
+# Use NVIDIA PyTorch base image with CUDA 13.0
+FROM nvcr.io/nvidia/pytorch:25.01-py3
 
 # Set working directory
 WORKDIR /app
@@ -16,13 +16,15 @@ RUN apt-get update && apt-get install -y \
     libxrender-dev \
     libgomp1 \
     wget \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file
 COPY requirements.txt /app/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Upgrade pip and install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy inference scripts
 COPY inference_tensorrt.py /app/
@@ -34,9 +36,10 @@ RUN mkdir -p /app/models /data/videos /data/output
 # Copy model files (these should be added during build or mounted at runtime)
 COPY models/ /app/models/
 
-# Set environment variables
+# Set environment variables for CUDA 13.0
 ENV PYTHONUNBUFFERED=1
 ENV CUDA_MODULE_LOADING=LAZY
+ENV LD_LIBRARY_PATH=/usr/local/cuda-13.0/lib64:${LD_LIBRARY_PATH}
 
 # Default command shows help
 CMD ["python", "inference_tensorrt.py", "--help"]
