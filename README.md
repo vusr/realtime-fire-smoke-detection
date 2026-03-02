@@ -19,7 +19,7 @@ This project develops a lightweight object detection model for identifying fire 
 - Training images: Used for model training
 - Validation images: Used during training
 - Test images: 4,306 images (1,115 with fire, 2,081 with smoke, 2,005 background)
-- Ground truth boxes: 5,193 total (2,878 fire, 2,315 smoke)
+- Ground truth boxes (test): 5,193 total (2,878 fire, 2,315 smoke)
 
 **Classes:**
 - Class 0: Smoke
