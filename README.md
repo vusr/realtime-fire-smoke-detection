@@ -338,23 +338,40 @@ docker run --rm --gpus all nvidia/cuda:12.1.0-base-ubuntu22.04 nvidia-smi
 
 ### Prerequisites
 
-- Python 3.10+
-- CUDA 12.1+
-- cuDNN 8.9+
-- TensorRT 10.x (for TensorRT inference)
+The models were trained and evaluated with the following environment:
+
+- **Python**: 3.10+
+- **CUDA**: 13.0
+- **cuDNN**: 9.15.1
+- **TensorRT**: 10.15.1+ (for TensorRT inference)
+- **GPU**: NVIDIA L4 (24GB VRAM) - also works on RTX 4080, RTX 3090, etc.
 
 ### Install Dependencies
 
-```bash
-# Install PyTorch with CUDA support
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+**Option 1: Install with CUDA 13.0 (Recommended - matches training environment)**
+
+# Install PyTorch with CUDA 13.0 support
+pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cu130
 
 # Install other dependencies
 pip install -r requirements.txt
 
 # Install TensorRT (for TensorRT inference)
-pip install tensorrt
+pip install tensorrt>=10.15.0
 ```
+
+**Option 2: Install with CUDA 12.x (Alternative)**
+
+# Install PyTorch with CUDA 12.1 support
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Install other dependencies
+pip install -r requirements.txt
+
+# Install TensorRT
+pip install tensorrt
+
+# NOTE: You MUST rebuild TensorRT engines when using different CUDA versions
 
 ### Download Models
 
