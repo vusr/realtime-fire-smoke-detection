@@ -136,6 +136,43 @@ The INT8 model provides excellent speed with minimal accuracy loss
 </tr>
 </table>
 
+## Download Models and Complete Results
+
+Due to the large size of model files and complete evaluation results, all project artifacts are hosted on Google Drive:
+
+**📁 [Download Complete Project Files from Google Drive](https://drive.google.com/drive/folders/1f7-pTov6M6ZUjG3o-urrcrw-zVAHnJLN?usp=sharing)**
+
+### What's Included
+
+The Google Drive folder contains:
+
+- **YOLO26l/** - Complete YOLO26l experiments
+  - Training artifacts and checkpoints
+  - Full evaluation results with visualizations
+  - Quantized models (TensorRT engines: FP16, INT8 for batch sizes 16, 32, 64)
+  - Quantization reports
+
+- **YOLO26m/** - Complete YOLO26m experiments
+  - Training artifacts
+  - Evaluation results
+  - Quantized models
+
+- **RT-DETR/** - Complete RT-DETR experiments
+  - Training artifacts
+  - Evaluation results
+  - Quantized models
+
+### Quick Download Guide
+
+**Option 1: Download Everything**
+
+**Option 2: Download Only What You Need**
+
+For inference only:
+1. Download `YOLO26l/YOLO26l_Quantization/optimized_models_yolo26l/yolo26l_best_int8_bs16.engine`
+2. Download `YOLO26l/YOLO26l_Evaluation/yolo26l_best.pt`
+3. Place in your local `models/` directory
+
 ## Inference Scripts
 
 Two inference scripts are provided for different deployment scenarios:
