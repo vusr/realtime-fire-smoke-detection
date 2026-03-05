@@ -254,6 +254,37 @@ python inference_pytorch.py --video /path/to/video.mp4 --output results/
 
 Docker setup optimized for RTX 4080 deployment with TensorRT support.
 
+### TRT Build + Inference — GPU-Specific Engine Rebuild (Recommended)
+
+TensorRT engines are hardware-specific: an engine built on one GPU (e.g. NVIDIA L4)
+will not load correctly on a different GPU (e.g. RTX 4080). Use this workflow to
+build a fresh INT8 engine optimised for your exact GPU and TensorRT version, then
+run inference in a single command.
+
+**Files used:**
+- `Dockerfile.trt-build` — image with the `.pt` model baked in; no pre-built engine
+- `docker-compose.trt-build.yml` — orchestrates the build + inference pipeline
+- `build_engine.py` — INT8 engine builder (called automatically on container start)
+- `entrypoint_trt.sh` — chains the engine build then inference
+
+#### Quick start
+
+```
+# 1. Place your input video
+mkdir -p videos && cp /path/to/your/video.mp4 videos/test_video.mp4
+
+# 2. (Optional but recommended) Add INT8 calibration images
+#    Place representative JPEG/PNG frames under ./calibration/images/
+#    If omitted, the engine is still built as INT8 with implicit TRT calibration.
+mkdir -p calibration/images
+cp /path/to/calibration/frames/*.jpg calibration/images/
+
+# 3. Build the Docker image and run
+#    First run: builds the TRT INT8 engine (~5–15 min), then runs inference.
+#    Subsequent runs: engine is cached in ./engines/ — build is skipped.
+docker compose -f docker-compose.trt-build.yml up --build
+```
+
 ### Build Docker Image
 
 ```bash
