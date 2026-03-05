@@ -1,0 +1,85 @@
+# Dockerfile.trt-build
+# ====================
+# Builds a TensorRT INT8 engine from the PyTorch .pt model at container
+# startup, then runs inference_tensorrt.py with the freshly-built engine.
+#
+# Why rebuild instead of shipping the pre-built engine?
+#   TensorRT engines are hardware-specific: an engine built on one GPU
+#   architecture (e.g. L4 / Ada Lovelace) will not load correctly on a
+#   different GPU (e.g. RTX 4090 / A100). Building at first run ensures the
+#   engine is optimised for the exact GPU and TRT version on the host.
+#
+# Runtime volume layout (see docker-compose.trt-build.yml):
+#   /app/engines/               ← built engine is saved here (mount to persist)
+#   /data/calibration/images/   ← optional INT8 PTQ calibration images (ro)
+#   /data/videos/               ← input video files (ro)
+#   /data/output/               ← inference results: JSON, CSV, summary (rw)
+
+FROM nvcr.io/nvidia/pytorch:25.01-py3
+
+WORKDIR /app
+
+# ── System dependencies ───────────────────────────────────────────────────────
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    wget \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Python dependencies ───────────────────────────────────────────────────────
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# ── Application scripts ───────────────────────────────────────────────────────
+COPY build_engine.py         /app/
+COPY inference_tensorrt.py   /app/
+COPY entrypoint_trt.sh       /app/
+RUN chmod +x /app/entrypoint_trt.sh
+
+# ── PyTorch source model (baked into the image) ───────────────────────────────
+# Only the .pt file is copied — the TRT engine is NOT shipped; it is built
+# from this .pt file at container startup for the host's specific GPU.
+COPY models/yolo26l_best.pt  /app/models/
+COPY models/dataset.yaml     /app/models/
+
+# ── Runtime directories ───────────────────────────────────────────────────────
+# These are created here so Docker doesn't auto-create them as root when
+# bind-mounts are used without pre-existing host directories.
+RUN mkdir -p \
+    /app/engines \
+    /data/calibration/images \
+    /data/videos \
+    /data/output
+
+# ── Environment variables ─────────────────────────────────────────────────────
+ENV PYTHONUNBUFFERED=1
+ENV CUDA_MODULE_LOADING=LAZY
+ENV LD_LIBRARY_PATH=/usr/local/cuda-13.0/lib64:${LD_LIBRARY_PATH}
+
+# Engine build parameters (override via docker-compose environment section)
+ENV MODEL_PATH=/app/models/yolo26l_best.pt
+ENV ENGINE_PATH=/app/engines/yolo26l_int8_bs16.engine
+ENV CALIB_DIR=/data/calibration
+ENV IMG_SIZE=640
+ENV BATCH_SIZE=16
+ENV DEVICE=0
+ENV WORKSPACE_GB=4
+
+# ── Entrypoint ────────────────────────────────────────────────────────────────
+# entrypoint_trt.sh: (1) builds engine, then (2) runs inference_tensorrt.py
+# CMD arguments are forwarded directly to inference_tensorrt.py as CLI flags.
+ENTRYPOINT ["/app/entrypoint_trt.sh"]
+
+# Default inference arguments — override in docker-compose or at `docker run`:
+#   docker run --gpus all fire-detection-trt \
+#       --video /data/videos/my_video.mp4 \
+#       --output /data/output/ \
+#       --conf-thresh 0.3 \
+#       --batch-size 16
+CMD ["--help"]

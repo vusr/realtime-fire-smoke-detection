@@ -1,0 +1,89 @@
+version: '3.8'
+
+# docker-compose.trt-build.yml
+# =============================
+# Builds a TensorRT INT8 engine from the PyTorch .pt model on the host GPU,
+# then immediately runs inference_tensorrt.py with the resulting engine.
+#
+# First run  : engine is built (~5–15 min depending on GPU), then inference runs.
+# Later runs : engine already exists in ./engines/ — build is skipped (~seconds),
+#              inference starts immediately.
+#
+# Usage
+# -----
+#   # Build image and run (first time — builds engine + runs inference):
+#   docker compose -f docker-compose.trt-build.yml up --build
+#
+#   # Subsequent runs (reuses cached engine):
+#   docker compose -f docker-compose.trt-build.yml up
+#
+#   # Force engine rebuild (e.g. after GPU change):
+#   rm -rf ./engines && docker compose -f docker-compose.trt-build.yml up
+#
+# Volume layout on the host
+# -------------------------
+#   ./engines/                  ← persisted TRT engine (auto-created on first run)
+#   ./calibration/images/       ← optional PTQ calibration images (JPEG/PNG)
+#   ./videos/                   ← input video files
+#   ./output/                   ← inference results (JSON, CSV, summary.txt)
+
+services:
+  fire-detection-trt:
+    build:
+      context: .
+      dockerfile: Dockerfile.trt-build
+    image: fire-detection-trt:latest
+    container_name: fire-detection-trt
+
+    # ── GPU passthrough ───────────────────────────────────────────────────────
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    # ── Volume mounts ─────────────────────────────────────────────────────────
+    volumes:
+      # Persist the built TRT engine across container restarts.
+      # Delete this directory to force a full engine rebuild.
+      - ./engines:/app/engines
+
+      # INT8 PTQ calibration images (optional but recommended).
+      # Place representative JPEG/PNG images under ./calibration/images/.
+      # If this directory is empty, engine is still built as INT8 using
+      # TensorRT's implicit calibration (slightly lower accuracy).
+      - ./calibration:/data/calibration:ro
+
+      # Input videos — read-only mount.
+      - ./videos:/data/videos:ro
+
+      # Inference output: predictions.json, predictions.csv, summary.txt
+      - ./output:/data/output
+
+    # ── Environment variables ─────────────────────────────────────────────────
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+      # ── Engine build settings ─────────────────────────────────────────────
+      # Tune BATCH_SIZE and WORKSPACE_GB to fit your GPU's VRAM.
+      # The engine is fixed to BATCH_SIZE at build time; inference_tensorrt.py
+      # must use the same --batch-size value.
+      - BATCH_SIZE=16
+      - IMG_SIZE=640
+      - WORKSPACE_GB=4
+
+    # ── Inference arguments ───────────────────────────────────────────────────
+    # These are passed to inference_tensorrt.py after the engine build.
+    # Update --video to point to your actual video file.
+    # --batch-size must match the BATCH_SIZE used when building the engine.
+    command: >
+      --video /data/videos/test_video.mp4
+      --output /data/output/
+      --conf-thresh 0.25
+      --iou-thresh 0.65
+      --batch-size 16
+      --skip-frames 1
