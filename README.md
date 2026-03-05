@@ -284,6 +284,7 @@ cp /path/to/calibration/frames/*.jpg calibration/images/
 #    Subsequent runs: engine is cached in ./engines/ — build is skipped.
 docker compose -f docker-compose.trt-build.yml up --build
 ```
+### Only Inference (Without Engine Rebuild)
 
 ### Build Docker Image
 
